@@ -1,6 +1,6 @@
+from datetime import datetime
+
 import arxiv
-
-
 class Fetcher:
     def __init__(self):
         self.categ_ml = [
@@ -27,7 +27,15 @@ class Fetcher:
 
     def arxiv(self, subject="ml"):
         categ = self.categ_bio if subject == "bio" else self.categ_ml
-        papers = arxiv.query(sort_by="lastUpdatedDate", search_query=" OR ".join(categ))
+        invalidate_cache = False
 
-        return papers
+        if self._cache_date[categ]:
+            cache_delta = self._cache_date[categ] - datetime.today()
+            invalidate_cache = True if cache_delta.days > 1 else False
+
+        if not self._cache[categ] or invalidate_cache:
+            self._cache[categ] = arxiv.query(sort_by="lastUpdatedDate", search_query=" OR ".join(categ))
+            self._cache_date[categ] = datetime.today()
+
+        return self._cache[categ]
 

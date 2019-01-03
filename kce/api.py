@@ -4,6 +4,7 @@ from kce.crawler import Fetcher
 from kce.mail import sendMail
 
 api = responder.API(version = "0.1")
+f = Fetcher()
 
 @api.route("/")
 def default(req, resp):
@@ -11,7 +12,6 @@ def default(req, resp):
 
 @api.route("/latest/arxiv/{subject}")
 def get_latest(req, resp, *, subject):
-    f = Fetcher()
     papers = f.arxiv(subject)
     resp.media = papers
 
