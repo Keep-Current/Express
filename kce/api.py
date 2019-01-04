@@ -18,13 +18,14 @@ def get_latest(req, resp, *, subject):
 @api.route("/message")
 class MessageService:
 
-    def on_post(self, req, resp):
-        print(req.params)
+    async def on_post(self, req, resp):
+        json = await req.media()
+        print(json)
 
-        if set(['email', 'name', 'message']).issubset(req.params):
-            self.fromaddr = req.params['email']
-            self.fromname = req.params['name']
-            self.msg = req.params['message']
+        if set(['email', 'name', 'message']).issubset(json.keys()):
+            self.fromaddr = json['email']
+            self.fromname = json['name']
+            self.msg = json['message']
         
             if self.fromaddr and self.fromname and self.msg:
                 self.sendMessage()
