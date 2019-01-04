@@ -3,6 +3,7 @@ import responder
 from kce.crawler import Fetcher
 from kce.mail import sendMail
 
+
 api = responder.API(version = "0.1")
 f = Fetcher()
 
@@ -19,7 +20,7 @@ def get_latest(req, resp, *, subject):
 class MessageService:
 
     async def on_post(self, req, resp):
-        json = await req.media()
+        json = await req.media(format="json")
 
         if set(['email', 'name', 'message']).issubset(json.keys()):
             self.fromaddr = json['email']
