@@ -20,7 +20,7 @@ class MessageService:
 
     def on_post(self, req, resp):
         print(req.params)
-        
+
         if set(['email', 'name', 'message']).issubset(req.params):
             self.fromaddr = req.params['email']
             self.fromname = req.params['name']
@@ -31,7 +31,8 @@ class MessageService:
                 resp.text = "OK"
                 return
 
-        resp.text = "..."
+        resp.status_code = api.status_codes.HTTP_400
+        resp.text = "FAILED"
 
     def sendMessage(self):
         self.msg = '''<h1> New message from {name} at Keep-Current site: </h1> 
