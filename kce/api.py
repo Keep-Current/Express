@@ -20,7 +20,6 @@ class MessageService:
 
     async def on_post(self, req, resp):
         json = await req.media()
-        print(json)
 
         if set(['email', 'name', 'message']).issubset(json.keys()):
             self.fromaddr = json['email']
