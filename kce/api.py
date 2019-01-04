@@ -19,9 +19,9 @@ def get_latest(req, resp, *, subject):
 class MessageService:
 
     def on_post(self, req, resp):
-        self.fromaddr = req.context['email']
-        self.fromname = req.context['name']
-        self.msg = req.context['message']
+        self.fromaddr = req.params['email']
+        self.fromname = req.params['name']
+        self.msg = req.params['message']
         
         if self.fromaddr and self.fromname and self.msg:
             self.sendMessage()
