@@ -1,6 +1,6 @@
-from datetime import datetime
-
 import arxiv
+from kce.timed_cache import timed_cache
+
 class Fetcher:
     def __init__(self):
         self.categ_ml = [
@@ -25,17 +25,8 @@ class Fetcher:
             "cat:q-bio.TO",
         ]
 
+    @timed_cache(hours=2)
     def arxiv(self, subject="ml"):
         categ = self.categ_bio if subject == "bio" else self.categ_ml
-        invalidate_cache = False
-
-        if self._cache_date[categ]:
-            cache_delta = self._cache_date[categ] - datetime.today()
-            invalidate_cache = True if cache_delta.days > 1 else False
-
-        if not self._cache[categ] or invalidate_cache:
-            self._cache[categ] = arxiv.query(sort_by="lastUpdatedDate", search_query=" OR ".join(categ))
-            self._cache_date[categ] = datetime.today()
-
-        return self._cache[categ]
+        return arxiv.query(sort_by="lastUpdatedDate", search_query=" OR ".join(categ))
 
