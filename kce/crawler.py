@@ -28,5 +28,7 @@ class Fetcher:
     @timed_cache(hours=2)
     def arxiv(self, subject="ml"):
         categ = self.categ_bio if subject == "bio" else self.categ_ml
-        return arxiv.query(sort_by="lastUpdatedDate", search_query=" OR ".join(categ))
+        return arxiv.query(sort_by="lastUpdatedDate", 
+                            max_results=100,
+                            search_query=" OR ".join(categ))
 
